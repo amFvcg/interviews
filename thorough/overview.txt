@@ -1,0 +1,114 @@
+== OVERVIEW ==
+We're gonna test candidate's knowledge and skills by prototyping RPG-like
+character. 
+
+1. Object definition
+Requirement:
+- create a definition of Character, which consists of:
+-- name;
+-- health;
+-- strength;
+-- virtue; [added on Monster introduction] can be one of X options;
+
+Things to watch for (should be added now or later on):
+- constructor, assignment (copy/move), destructor;
+-- explicit
+- class vs struct (which and why);
+-- bit fields
+-- padding
+-- memory alignment
+-- empty base class optimization; (empty class and array of empty classes)
+-- types of polymorphism (subtype, ad hoc, parametric, coercion (casting))
+- use of virtual (if used - why?); 
+-- how vtable is implemented;
+- polymorphism - types
+- use of noexcept in move ctr/ass;
+- check for (this!=other) in ass;
+
+Extension (inheritance vs composition):
+- introduce Monster having : [name, health, strength, reward] 
+- diamond problem;
+
+2. Handle attack;
+Requirement:
+- one character is attacker, the other is defender;
+- defender can be either harmed or not (hit/miss);
+- attacker cannot be injured;
+
+Extensions:
+- check if proposed solution can handle for ex. Monster vs Monster or
+  Character vs Monster;
+
+3. Check regiments strength
+Requirements:
+- having container of Characters and regiment size calculate strength of each
+  regiment (assume that container is split into reg_size regiments; sum up
+  strengths of all Character in each regiment);
+- return container of regiment sizes;
+
+Checks:
+- what container and why (moreover: what's the implementation underneath);
+- is 'using' or 'typedef' used?
+- if vector has been chosen and why ?
+- vector.reserve() ? reallocation; requirements for mv ctor (noexcept and why?);
+- STL used ? (distance, accumulate, begin, end)
+- if accumulate used - what with init_value?
+- check for operator+;
+
+4. Fizzbuzz
+Each regiment needs a Priest, Commander. 
+They'll be picked up by following rule:
+every 3rd is Priest, every 5th is Commander, but every which is 3rd and 5th is
+PriestCommander;
+Requirements:
+- get the sequence number of a Character; if it's multiply of 3 return string
+  "Priest"; if it's multiply of 5 return string "Commander"; if it's multiply
+  of both 3 and 5 - return string "PriestCommander";
+
+5. Perform battle
+Requirement:
+- list of two participants, fighting till one of them is dead (health <= 0); Return list of dead
+  participants and alive ones; Assume that they attack at the same time;
+
+Extension:
+- change dead characters into Zombies; (test for transform)
+- how to make it faster (c++17 parallell, threads, asyncs)
+- how to handly Character and Monster as well (templates mf*);
+
+
+N-1. How to implement communication
+- test for rpc/pub/sub;
+- sockets/linux sockets;
+- other IPC;
+
+
+N. How to build
+- PREPROCESSOR - how to pass VERSION
+- g++ call, O flags, -Wall, etc
+- build systems
+
+N+1. How to control versions
+- git/svn/other?
+
+N+2. How to test
+- BDD / TDD;
+
+N+3. How to debug
+- valgrind, gdb;
+- checking process id;
+- checking memory usage;
+- checking process stats (proc)
+
+TO ADD:
+
+constexpr
+mutexes and lockguards (need a context in our RPG like world)
+
+
+exception handling
+- try catch in initialization list;
+- how to catch bad_alloc and throw own exception;
+
+use of sort + partition
+
+
