@@ -18,10 +18,10 @@ Things to watch for (should be added now or later on):
 -- padding
 -- memory alignment
 -- empty base class optimization; (empty class and array of empty classes)
+--- size of struct A {}; size of struct B : A {int x;};
 -- types of polymorphism (subtype, ad hoc, parametric, coercion (casting))
 - use of virtual (if used - why?); 
 -- how vtable is implemented;
-- polymorphism - types
 - use of noexcept in move ctr/ass;
 - check for (this!=other) in ass;
 
