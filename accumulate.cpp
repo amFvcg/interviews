@@ -13,7 +13,9 @@
  * =====================================================================================
  */
 #include <algorithm>
+#include <chrono>
 #include <iostream>
+#include <fstream>
 #include <numeric>
 #include <tuple>
 #include <vector>
@@ -72,7 +74,39 @@ Entries accumulate(Entries input)
     return result;
 }
 
-int main()
+Entries read_entries(std::string filename)
+{
+    std::ifstream file(filename.c_str());
+    std::string line;
+    int size;
+    if (!std::getline(file, line))
+        return {};
+    size = std::stoi(line);
+    Entries input;
+    input.reserve(size);
+    while(std::getline(file, line))
+    {
+        std::string::size_type pos = 0;
+        std::string::size_type n = line.find(',', pos);
+        Entry e;
+        if (n != std::string::npos)
+            e.b = std::stoi(line.substr(pos, n));
+        else
+            continue;
+        pos = n+1;
+        n = line.find(',', pos);
+        if (n != std::string::npos)
+            e.i = std::stoi(line.substr(pos, n));
+        else
+            continue;
+        pos = n+1;
+        e.v = std::stof(line.substr(pos, line.size()));
+        input.emplace_back(std::move(e));
+    }
+    return input;
+}
+
+int main(int argc, char** argv)
 {
     Entries input {{false, 1, 2}, {true, 2, 3}, {true, 1, 3}, {false, 4, 1}, {false, 1, 1}, {true, 1, 2}};
     for (const auto& item : input)
@@ -81,6 +115,13 @@ int main()
     for (auto&& item : accumulate(input))
         std::cout << item << " | ";
     std::cout << std::endl;
-    accumulate({});
+    auto beg = std::chrono::system_clock::now();
+    auto entries = read_entries(argv[1]);
+    auto end = std::chrono::system_clock::now();
+    std::cout << "Read entries took: " << (end-beg).count() << std::endl;
+    beg = std::chrono::system_clock::now();
+    accumulate(entries);
+    end = std::chrono::system_clock::now();
+    std::cout << "Parse entries took: " << (end-beg).count() << std::endl;
     return 0;
 }
