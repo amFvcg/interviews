@@ -98,11 +98,44 @@ N+3. How to debug
 - checking process id;
 - checking memory usage;
 - checking process stats (proc)
+- number of open ports;
+  - established vs close wait;
+- find number of open fds by process;
+- session persistence (terminal multiplexer);
+- open big file on small machine;
+
+- change dir (and file) permissions recursively;
+- assume csv file downloaded from db has some whitespace padding, get rid of
+  it;
+- count occurances of string in file;
+- find error messages in log (two lines: status: error\n message: msg)
+  - print count of distinct messages;
+
+  log message:
+  {"message": "some message",
+   "status": "error"},
+   ...
+  {"message": "other message",
+  "status": "ok"},
+   ...
+  {"message": "some other message",
+   "status": "error"},
+
+
+
+N+4. Python:
+- class member vs object member;
+- list comp, generator
+- decorator
+- with clause
+- multiprocessing
+- PEP8
 
 TO ADD:
 
 constexpr
-mutexes and lockguards (need a context in our RPG like world)
+
+mutexes and lockguards, cond var (need a context in our RPG like world)
 
 
 exception handling
