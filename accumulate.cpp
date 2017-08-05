@@ -42,37 +42,28 @@ std::ostream& operator<<(std::ostream& stream, const Entry& entry) {
 
 using Entries = std::vector<Entry>;
 
-Entries accumulate(Entries input)
+Entries accumulate(const Entries& input)
 {
-    std::sort(input.begin(), input.end(), 
-                operator<                 
-    );
-    auto it = std::find_if(input.begin(), input.end(), [](const auto& item) { return item.b; }); 
-    auto range = std::equal_range(it, input.end(), *it, operator<);
+    Entries result;
+    auto range = std::equal_range(input.begin(), input.end(), *input.begin(), operator<);
     while (range.first != std::end(input))
     {
-        if (std::distance(range.first, range.second) > 1)
-            it = input.erase(range.first, range.second);
-        else
-            it = range.second;
-        range = std::equal_range(it, std::end(input), *it, operator<);
-    }
-    Entries result;
-    range = std::equal_range(input.begin(), input.end(), *input.begin(), operator<);
-    while(range.first != std::end(input))
-    {
-        result.push_back(
-                {
-                range.first->b,
-                range.first->i,
-                std::accumulate(range.first, range.second, 
-                    (float)0.0, [](const auto& init, const auto& elem) { return init + elem.v; })
-                }
-                );
+
+        if (!range.first->b || 1 == std::distance(range.first, range.second)) 
+            result.push_back(
+                    {
+                    range.first->b,
+                    range.first->i,
+                    std::accumulate(range.first, range.second, 
+                        (float)0.0, [](const auto& init, const auto& elem) { return init + elem.v; })
+                    }
+                    );
         range = std::equal_range(range.second, input.end(), *range.second, operator<);
+
     }
     return result;
 }
+
 
 Entries read_entries(std::string filename)
 {
@@ -109,6 +100,9 @@ Entries read_entries(std::string filename)
 int main(int argc, char** argv)
 {
     Entries input {{false, 1, 2}, {true, 2, 3}, {true, 1, 3}, {false, 4, 1}, {false, 1, 1}, {true, 1, 2}};
+    std::sort(input.begin(), input.end(), 
+                operator<                 
+    );
     for (const auto& item : input)
         std::cout << item << " | ";
     std::cout << std::endl;
@@ -119,6 +113,12 @@ int main(int argc, char** argv)
     auto entries = read_entries(argv[1]);
     auto end = std::chrono::system_clock::now();
     std::cout << "Read entries took: " << (end-beg).count() << std::endl;
+    beg = std::chrono::system_clock::now();
+    std::sort(entries.begin(), entries.end(), 
+                operator<                 
+    );
+    end = std::chrono::system_clock::now();
+    std::cout << "Sort entries took: " << (end-beg).count() << std::endl;
     beg = std::chrono::system_clock::now();
     accumulate(entries);
     end = std::chrono::system_clock::now();
